@@ -12,7 +12,7 @@ function logger (req, res, next) {
 
 const validateUserId= async( req, res, next)=> {
   try{
-    const users = await User.findById(req.params.id)
+    const users = await User.getById(req.params.id)
     if(!users) {
       res.status(404).json({
         message: "user not found"
@@ -29,15 +29,14 @@ const validateUserId= async( req, res, next)=> {
 const validateUser= (req, res, next) => {
   if(!req.body) {
     res.status(400).json({message: "missing user data"})
-  }else{
-    if(!req.body.name){
-      res.status(400).json({message: "missing required name field"})
+  }else if(!req.body.name){
+      res.status(400).json({message: "missing required name"})
     }else{
       next()
     }
   }
   // DO YOUR MAGIC
-}
+
 
 const validatePost= (req, res, next) => {
   if(!req.body) {
@@ -45,6 +44,8 @@ const validatePost= (req, res, next) => {
   }else{
     if(!req.body.text || !req.body.user_id){
       res.status(400).json({message: "missing required text or user_id fields"})
+    }else{
+      next()
     }
   }
   // DO YOUR MAGIC
